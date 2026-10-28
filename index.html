@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#090e1b">
+  <title>LinguaContext · AI Cultural Translator | Group 18</title>
+  <style>
+    :root{
+      --base:#080d19;--surface:#121b2c;--surface-2:#172338;--surface-3:#1d2b40;
+      --line:#2b3a52;--text:#f4f7fc;--muted:#a6b3c9;--soft:#8191ad;
+      --purple:#a88cff;--cyan:#5fe4da;--blue:#8fbbff;--red:#ffb0a9;
+      --shadow:0 18px 45px rgba(0,0,0,.24)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse 65% 29% at 90% 0%,#24224b 0%,transparent 78%),radial-gradient(ellipse 45% 30% at 2% 20%,#113047 0%,transparent 78%),var(--base);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.55}
+    button,select,textarea,input{font:inherit}
+    button{cursor:pointer}
+    .wrap{max-width:1160px;margin:auto;padding:22px 24px 45px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text);font-size:17px;font-weight:800;letter-spacing:-.03em}
+    .brand-mark{display:grid;place-items:center;height:39px;width:39px;border-radius:12px;color:#0b1527;background:linear-gradient(135deg,var(--cyan),var(--purple));box-shadow:0 6px 20px #5fe4da20}
+    .brand-mark svg{width:22px;height:22px}
+    nav{display:flex;gap:20px;align-items:center}
+    nav a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:650}
+    nav a:hover{color:var(--text)}
+    .hero{padding:38px 40px;position:relative;overflow:hidden;border:1px solid #36445f;border-radius:22px;background:linear-gradient(115deg,#18273d,#141a30 68%,#282042);box-shadow:var(--shadow)}
+    .hero::after{content:"";position:absolute;right:-60px;top:-90px;width:360px;height:360px;background:radial-gradient(circle,#7f70e93b 0%,#5b58c413 52%,transparent 72%);pointer-events:none}
+    .eyebrow{display:flex;align-items:center;gap:9px;text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:850;color:#8deddf}
+    .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+    h1{font-size:clamp(24px,3vw,39px);line-height:1.2;letter-spacing:-.035em;max-width:100%;margin:18px 0 13px;overflow-wrap:break-word}
+    h1 .accent{background:linear-gradient(90deg,#74e2e2,#a98dff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{color:#c0cce0;font-size:15px;max-width:670px;margin:0}
+    .hero-bottom{display:flex;gap:11px;align-items:center;margin-top:22px;flex-wrap:wrap}
+    .tag{border:1px solid #43536f;border-radius:100px;background:#1e2e45a8;color:#e0e9fa;padding:6px 12px;font-size:12px;font-weight:640}
+    .members{display:block;color:#aabbd4;font-size:12px;margin-top:17px}
+    .section{background:linear-gradient(160deg,rgba(20,31,50,.98),rgba(15,25,43,.98));border:1px solid var(--line);border-radius:20px;padding:27px 30px;margin-top:18px;box-shadow:var(--shadow)}
+    .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+    .section-head h2{font-size:19px;letter-spacing:-.025em;margin:0 0 4px}
+    .section-head p{color:var(--muted);font-size:13px;margin:0}
+    .mini-label{font-size:12px;font-weight:730;border:1px solid #344b61;color:#9ce9dd;border-radius:99px;padding:5px 10px;background:#122d38}
+    .field{min-width:0}
+    label{display:block;color:#dbe5f6;font-size:13px;font-weight:700;margin-bottom:8px}
+    textarea,input,select{width:100%;border:1px solid #3b4b67;border-radius:12px;background:#0d1728;color:var(--text);padding:13px 14px;outline:none;transition:border-color .18s,box-shadow .18s}
+    textarea{min-height:133px;resize:vertical;line-height:1.7}
+    textarea::placeholder,input::placeholder{color:#8495af}
+    textarea:focus,input:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 3px #a88cff2b}
+    select{height:49px;cursor:pointer}
+    .under-input{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;color:var(--soft);font-size:12px}
+    .under-input span:last-child{font-variant-numeric:tabular-nums}
+    .under-input span.warn{color:var(--red)}
+    .lang-grid{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);gap:12px;align-items:end;margin-top:20px}
+    .swap{display:grid;place-items:center;width:44px;height:49px;border-radius:12px;border:1px solid #4b5a75;background:#202e46;color:#cef2ef;transition:background .2s,transform .2s}
+    .swap:hover{background:#304462;transform:rotate(180deg)}
+    .swap svg{width:19px;height:19px}
+    .more-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .helper{font-size:12px;color:var(--soft);margin:7px 0 0}
+    .examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:21px;align-items:center}
+    .examples b{font-size:12px;color:var(--muted);margin-right:2px}
+    .chip{border-radius:99px;border:1px solid #3b4a64;background:#1b2a40;color:#c6d7f1;font-size:12px;padding:7px 12px}
+    .chip:hover{background:#2c3c57;color:#fff}
+    .actions{display:flex;gap:12px;align-items:center;margin-top:23px;flex-wrap:wrap}
+    .primary{border:0;border-radius:12px;background:linear-gradient(105deg,#7777ff,#967cf0);font-weight:800;color:#fff;padding:13px 22px;box-shadow:0 6px 22px #7d71ef30;min-height:47px}
+    .primary:hover{filter:brightness(1.1)}
+    .primary:disabled{opacity:.7;cursor:wait}
+    .secondary{border:1px solid #3c4a60;border-radius:12px;background:#1a273b;color:#dbe7f5;padding:11px 17px;min-height:44px;font-weight:700}
+    .secondary:hover{background:#293852}
+    .saving{color:var(--soft);font-size:12px}
+    .alert{padding:14px 17px;border-radius:12px;background:#38212b;border:1px solid #803b4b;color:#ffcbc9;margin-top:18px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .result-card{border-radius:15px;border:1px solid #34425a;padding:18px;background:#101a2c;min-width:0}
+    .result-card.adapted{background:linear-gradient(150deg,#102c30,#14242f);border-color:#286159}
+    .result-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px;flex-wrap:wrap}
+    .result-title strong{font-size:14px}
+    .badge{font-size:10px;letter-spacing:.07em;font-weight:800;color:#aebfff;border:1px solid #414c78;padding:3px 8px;border-radius:99px;text-transform:uppercase}
+    .badge.localized-badge{color:#a1f2e6;border-color:#2f776d}
+    .translated{font-size:17px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;min-height:72px;margin:0}
+    .copy-btn{margin-top:14px;color:#dceafa;background:#1c2d47;border:1px solid #344761;font-size:12px;font-weight:700;border-radius:9px;padding:7px 11px}
+    .copy-btn:hover{background:#2b4160}
+    .note-box{margin-top:17px;padding:18px;border:1px solid #494373;border-radius:14px;background:#231e39}
+    .note-box strong{font-size:13px;color:#d6c7ff}
+    .note-box p{white-space:pre-wrap;overflow-wrap:anywhere;margin:9px 0 0;color:#e0dcef;font-size:14px}
+    .disclaimer{font-size:12px;color:var(--soft);margin:15px 0 0}
+    .history-top{display:flex;align-items:start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .history-items{display:grid;gap:10px}
+    .history-empty{color:var(--muted);border:1px dashed #3b4b66;border-radius:13px;padding:26px;text-align:center;font-size:14px}
+    .history-item{border:1px solid #34435b;background:#111d30;border-radius:13px;padding:15px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+    .history-item strong{display:block;font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+    .history-meta{color:var(--soft);font-size:12px;margin-top:5px}
+    .history-output{font-size:12px;color:#9de5d7;margin-top:5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .history-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .history-buttons button{border:1px solid #3c4e66;background:#24314a;border-radius:8px;padding:7px 11px;font-size:12px;color:#dbeafa}
+    .history-buttons button:hover{background:#34455e}
+    footer{margin-top:22px;text-align:center;color:var(--soft);font-size:12px;line-height:1.8}
+    #toast{position:fixed;bottom:18px;right:18px;padding:11px 17px;background:#d4fff7;color:#08251e;border-radius:11px;box-shadow:0 10px 45px #0005;font-weight:800;opacity:0;transform:translateY(12px);pointer-events:none;transition:all .2s;z-index:10;font-size:13px}
+    #toast.visible{opacity:1;transform:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:760px){.wrap{padding:15px 14px 32px}.hero{padding:27px 23px}.section{padding:22px 19px}.more-grid,.result-grid{grid-template-columns:1fr}.history-item{grid-template-columns:1fr}.history-buttons{justify-content:flex-start}nav{gap:12px}}
+    @media(max-width:480px){.lang-grid{grid-template-columns:1fr 41px 1fr;gap:6px}.lang-grid label{font-size:11px}.swap{width:39px;height:46px}.section-head{margin-bottom:16px}.hero h1{font-size:25px}.tag{font-size:11px}.lang-grid select{padding-left:7px;padding-right:4px;font-size:12px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="wrap" id="top">
+  <div class="topbar">
+    <a class="brand" href="#top" aria-label="LinguaContext home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6m-6 0 6-6M4 5h9m-4-3v3m0 9c-2 3-4 5-7 6m11-16h7m-3-3v3m-5 16 5-12 5 12m-8-5h6"/></svg>
+      </span>
+      LinguaContext
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#workspace">Translator</a>
+      <a href="#history">History</a>
+    </nav>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">FA &amp; PE · Group 18 · Stage 2</div>
+    <h1 class="project-title">Language Translator &amp; Localization Tool:<br><span class="accent">Nuanced Text Translator with Cultural Adaptation</span></h1>
+    <p>Explore how Gemini translates language and adapts idioms, tone, and cultural context—side by side.</p>
+    <div class="hero-bottom">
+      <span class="tag">✦ Gemini AI</span>
+      <span class="tag">16 languages</span>
+      <span class="tag">Context-aware results</span>
+    </div>
+    <span class="members">Akash Lohar &nbsp;·&nbsp; Rafat Sayyed &nbsp;·&nbsp; Arshita Gupta</span>
+  </header>
+
+  <main>
+    <section class="section" id="workspace">
+      <div class="section-head">
+        <div><h2>Translate &amp; Localize</h2><p>Enter a sentence, choose your audience, and compare the meaning.</p></div>
+        <span class="mini-label">AI powered</span>
+      </div>
+      <form method="post" id="translator-form">
+        <div class="field">
+          <label for="source_text">Your text</label>
+          <textarea id="source_text" name="source_text" maxlength="4000" required placeholder="Type a phrase, proverb or a sentence…">{{ source_text }}</textarea>
+          <div class="under-input"><span>Try an idiom for the demo</span><span id="char-count">0 / 4,000</span></div>
+        </div>
+        <div class="lang-grid">
+          <div class="field">
+            <label for="source_language">From</label>
+            <select id="source_language" name="source_language">
+              <option value="Auto-detect" {% if source_language == 'Auto-detect' %}selected{% endif %}>Auto-detect</option>
+              {% for lang in languages %}<option value="{{ lang }}" {% if source_language == lang %}selected{% endif %}>{{ lang }}</option>{% endfor %}
+            </select>
+          </div>
+          <button type="button" id="swap" class="swap" title="Swap languages" aria-label="Swap source and target languages">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h13m-4-4 4 4-4 4M17 17H4m4-4-4 4 4 4"/></svg>
+          </button>
+          <div class="field">
+            <label for="target_language">To</label>
+            <select id="target_language" name="target_language">
+              {% for lang in languages %}<option value="{{ lang }}" {% if target_language == lang %}selected{% endif %}>{{ lang }}</option>{% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="more-grid">
+          <div class="field">
+            <label for="tone">Localized tone</label>
+            <select name="tone" id="tone">
+              {% for choice in tones %}<option value="{{ choice }}" {% if tone == choice %}selected{% endif %}>{{ choice }}</option>{% endfor %}
+            </select>
+            <p class="helper">Original, Formal or Casual</p>
+          </div>
+          <div class="field">
+            <label for="region">Audience / region (optional)</label>
+            <input id="region" name="region" maxlength="80" value="{{ region }}" placeholder="e.g. Maharashtra, India">
+            <p class="helper">Relevant regional expressions, when available</p>
+          </div>
+        </div>
+        <div class="examples" aria-label="Try a sample phrase">
+          <b>Try example:</b>
+          <button type="button" class="chip example" data-example="Break a leg!">Break a leg!</button>
+          <button type="button" class="chip example" data-example="An apple a day keeps the doctor away.">Apple a day</button>
+          <button type="button" class="chip example" data-example="This exam is a piece of cake.">Piece of cake</button>
+        </div>
+        <div class="actions">
+          <button class="primary" id="submit-btn" type="submit"><span id="submit-text">✦ Translate &amp; Compare</span></button>
+          <button class="secondary" type="button" id="clear-input">Clear form</button>
+          <span class="saving">Uses one Gemini API request per translation</span>
+        </div>
+      </form>
+    </section>
+
+    {% if error %}
+    <div class="alert" role="alert" id="error">{{ error }}</div>
+    {% endif %}
+
+    {% if standard_translation is not none %}
+    <section class="section" id="results" aria-live="polite">
+      <div class="section-head">
+        <div><h2>Translation results</h2><p>One meaning, two approaches. Compare what changed.</p></div>
+        <span class="mini-label">Generated by Gemini</span>
+      </div>
+      <div class="result-grid">
+        <article class="result-card">
+          <div class="result-title"><strong>Standard AI Translation</strong><span class="badge">Neutral</span></div>
+          <p id="standard-output" class="translated">{{ standard_translation }}</p>
+          <button class="copy-btn" type="button" data-copy-target="standard-output">Copy text ↗</button>
+        </article>
+        <article class="result-card adapted">
+          <div class="result-title"><strong>Culturally Adapted Translation</strong><span class="badge localized-badge">Localized</span></div>
+          <p id="localized-output" class="translated">{{ localized_translation }}</p>
+          <button class="copy-btn" type="button" data-copy-target="localized-output">Copy text ↗</button>
+        </article>
+      </div>
+      <div class="note-box">
+        <strong>✧ Cultural explanation</strong>
+        <p id="cultural-note">{{ cultural_note }}</p>
+        <button class="copy-btn" type="button" data-copy-target="cultural-note">Copy explanation ↗</button>
+      </div>
+      <p class="disclaimer">AI-generated results may be identical when no adaptation is needed. For important translations, verify meaning with a fluent speaker.</p>
+    </section>
+    {% endif %}
+
+    <section class="section" id="history">
+      <div class="section-head history-top">
+        <div><h2>Recent translations</h2><p>History is stored in this browser tab only. Use Clear history to erase it.</p></div>
+        <button type="button" id="clear-history" class="secondary">Clear history</button>
+      </div>
+      <div id="history-items" class="history-items" aria-live="polite"><div class="history-empty">Your recent translations will appear here after the first successful result.</div></div>
+    </section>
+  </main>
+  <footer>Built with Flask + Google Gemini API &nbsp;·&nbsp; Group 18 Student Microproject<br>Don't enter private information: translation text is sent to the Gemini API.</footer>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script id="latest-result" type="application/json">{% if standard_translation is not none %}{{ {"input": source_text, "source": source_language, "target": target_language, "tone": tone, "region": region, "standard": standard_translation, "localized": localized_translation, "note": cultural_note} | tojson }}{% else %}null{% endif %}</script>
+<script>
+(() => {
+  "use strict";
+  const input = document.getElementById('source_text');
+  const source = document.getElementById('source_language');
+  const target = document.getElementById('target_language');
+  const tone = document.getElementById('tone');
+  const region = document.getElementById('region');
+  const counter = document.getElementById('char-count');
+  const toastNode = document.getElementById('toast');
+  let toastTimer;
+  function toast(message) {
+    toastNode.textContent = message;
+    toastNode.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastNode.classList.remove('visible'), 2700);
+  }
+  function updateCount() {
+    counter.textContent = `${input.value.length.toLocaleString('en-IN')} / 4,000`;
+    counter.classList.toggle('warn', input.value.length > 3800);
+  }
+  input.addEventListener('input', updateCount);
+  updateCount();
+
+  document.getElementById('swap').addEventListener('click', () => {
+    const a = source.value;
+    source.value = target.value;
+    // An auto-detected source has no single language to move into "To".
+    target.value = a === 'Auto-detect' ? (source.value === 'English' ? 'Marathi' : 'English') : a;
+    toast('Languages swapped');
+  });
+  document.querySelectorAll('.example').forEach(b => b.addEventListener('click', () => {
+    input.value = b.dataset.example;
+    source.value = 'English';
+    target.value = 'Marathi';
+    updateCount();
+    input.focus();
+  }));
+  document.getElementById('clear-input').addEventListener('click', () => {
+    input.value = '';
+    source.value = 'English';
+    target.value = 'Marathi';
+    tone.value = 'Original';
+    region.value = '';
+    updateCount();
+    input.focus();
+    toast('Form cleared');
+  });
+  document.getElementById('translator-form').addEventListener('submit', e => {
+    if (!input.value.trim()) { e.preventDefault(); input.focus(); toast('Enter text to translate'); return; }
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-text').textContent = 'Translating…';
+  });
+
+  async function copyText(value) {
+    if (!value) { toast('Nothing to copy'); return; }
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        const temp = document.createElement('textarea');
+        temp.value = value;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        const success = document.execCommand('copy');
+        temp.remove();
+        if (!success) throw new Error('Copy failed');
+      }
+      toast('Copied to clipboard');
+    } catch { toast('Could not copy; select the text manually'); }
+  }
+  document.querySelectorAll('[data-copy-target]').forEach(b => b.addEventListener('click', () => {
+    const element = document.getElementById(b.dataset.copyTarget);
+    copyText(element ? element.textContent : '');
+  }));
+
+  // Client-only, per-tab history. No external history database or credentials.
+  const HISTORY_KEY = 'group18-linguacontext-session-history-v1';
+  const historyContainer = document.getElementById('history-items');
+  function getHistory() {
+    try { const h = JSON.parse(sessionStorage.getItem(HISTORY_KEY) || '[]'); return Array.isArray(h) ? h : []; }
+    catch { return []; }
+  }
+  function saveHistory(h) {
+    try { sessionStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 8))); }
+    catch { toast('Browser did not allow saving history'); }
+  }
+  function el(tag, cls, value) {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (value !== undefined) node.textContent = value;
+    return node;
+  }
+  function renderHistory() {
+    const entries = getHistory();
+    historyContainer.replaceChildren();
+    if (!entries.length) {
+      historyContainer.appendChild(el('div', 'history-empty', 'No translations yet. Your latest results will appear here.'));
+      return;
+    }
+    for (const entry of entries) {
+      const row = el('div', 'history-item');
+      const content = el('div');
+      const title = el('strong', '', entry.input || 'Untitled');
+      title.title = entry.input || '';
+      const meta = el('div', 'history-meta', `${entry.source} → ${entry.target}  ·  ${entry.tone}  ·  ${entry.time}`);
+      const translated = el('span', 'history-output', entry.localized || '');
+      content.append(title, meta, translated);
+      const buttons = el('div', 'history-buttons');
+      const restore = el('button', '', 'Restore input');
+      restore.type = 'button';
+      restore.addEventListener('click', () => {
+        input.value = entry.input || '';
+        source.value = entry.source || 'English';
+        target.value = entry.target || 'Marathi';
+        tone.value = entry.tone || 'Original';
+        region.value = entry.region || '';
+        updateCount();
+        document.getElementById('workspace').scrollIntoView({behavior:'smooth'});
+        input.focus({preventScroll:true});
+        toast('Input restored');
+      });
+      const copy = el('button', '', 'Copy result');
+      copy.type = 'button';
+      copy.addEventListener('click', () => copyText(entry.localized || ''));
+      buttons.append(restore, copy);
+      row.append(content, buttons);
+      historyContainer.appendChild(row);
+    }
+  }
+  document.getElementById('clear-history').addEventListener('click', () => {
+    try { sessionStorage.removeItem(HISTORY_KEY); } catch {}
+    renderHistory();
+    toast('History cleared');
+  });
+
+  const latest = JSON.parse(document.getElementById('latest-result').textContent);
+  if (latest && latest.localized) {
+    const h = getHistory();
+    const isDuplicate = h.length && h[0].input === latest.input &&
+      h[0].localized === latest.localized && h[0].source === latest.source &&
+      h[0].target === latest.target;
+    if (!isDuplicate) {
+      saveHistory([{...latest, time: new Date().toLocaleString()}, ...h]);
+    }
+  }
+  renderHistory();
+  // On a POST response, show the results without manually scrolling.
+  if (document.getElementById('results')) {
+    requestAnimationFrame(() => document.getElementById('results').scrollIntoView({block:'start'}));
+  }
+})();
+</script>
+</body>
+</html>
